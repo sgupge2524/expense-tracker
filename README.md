@@ -1,2 +1,47 @@
-# expense-tracker
-Expense tracker built with Spring Boot (MVC) and H2 Database
+# 家計簿アプリ（仮）
+
+Spring Boot を用いて作成した、個人向けの家計簿アプリです。  
+収入・支出の登録や月別の集計を行うことができます。
+
+大学の授業で学んだ技術（Spring Boot / MVC / JPA）をベースに、  
+**設計・Issue管理・テストを意識した個人開発**として作成しています。
+
+---
+
+## 機能一覧
+- ユーザー登録 / ログイン
+- 収入・支出の登録
+- 収支一覧表示
+- 月別の収入・支出集計
+- カテゴリ管理
+
+---
+
+## 使用技術
+- Java 17
+- Spring Boot
+- Spring MVC
+- Spring Data JPA
+- Spring Security
+- Thymeleaf
+- H2 Database
+- Lombok
+- JUnit（テスト）
+
+---
+
+## 画面構成（予定）
+- ログイン画面
+- 収支登録画面
+- 収支一覧画面
+- 月別集計画面
+
+※ 画面イメージは後日追加予定
+
+---
+
+## 起動方法
+1. 本リポジトリをクローン
+2. Eclipse でプロジェクトをインポート
+3. Spring Boot アプリケーションを起動
+4. ブラウザで以下にアクセス  
