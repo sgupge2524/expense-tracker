@@ -1,9 +1,6 @@
 @startuml
 left to right direction
 
-
-
-
 entity User {
   +id : Long <<PK>>
   --
