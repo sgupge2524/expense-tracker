@@ -1,15 +1,14 @@
+```plantuml
 @startuml
 left to right direction
 actor "ユーザー" as User
 
-rectangle "家計簿共有アプリ" {
+rectangle "家計簿アプリ（MVP）" {
 
   usecase "支出を登録する" as UC1
   usecase "収入を登録する" as UC2
-  usecase "カテゴリを管理する" as UC3
-  usecase "月別収支を確認する" as UC4
-  usecase "家計を共有する" as UC5
-  usecase "レシート画像を読み取る" as UC6
+  usecase "記録を編集・削除する" as UC3
+  usecase "収支一覧を確認する" as UC4
 
 }
 
@@ -17,7 +16,6 @@ User --> UC1
 User --> UC2
 User --> UC3
 User --> UC4
-User --> UC5
-User --> UC6
 
 @enduml
+```
