@@ -1,0 +1,61 @@
+@startuml
+title 家計簿アプリ MVCクラス図
+left to right direction
+skinparam packageStyle rectangle
+
+package "Controller" {
+  class ExpenseController
+  class CategoryController
+}
+
+package "Service" {
+  class ExpenseService
+  class CategoryService
+}
+
+package "Repository" {
+  interface ExpenseRepository
+  interface CategoryRepository
+  interface UserRepository
+}
+
+package "Entity" {
+
+  class User {
+    id : Long
+    name : String
+    email : String
+    password : String
+  }
+
+  class Category {
+    id : Long
+    name : String
+  }
+
+  class Expense {
+    id : Long
+    amount : Integer
+    type : ExpenseType
+    date : LocalDate
+    memo : String
+  }
+}
+
+' MVC依存関係
+ExpenseController --> ExpenseService
+CategoryController --> CategoryService
+
+ExpenseService --> ExpenseRepository
+CategoryService --> CategoryRepository
+
+ExpenseRepository --> Expense
+CategoryRepository --> Category
+UserRepository --> User
+
+' Entity間の関係
+Expense --> Category
+Expense --> User
+Category --> User
+
+@enduml
