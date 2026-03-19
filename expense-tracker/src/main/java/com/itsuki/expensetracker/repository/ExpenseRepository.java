@@ -7,11 +7,17 @@
 *-----------------------------------------------------------*/ 
 package com.itsuki.expensetracker.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
 import com.itsuki.expensetracker.model.Expense;
+import com.itsuki.expensetracker.model.ExpenseType;
 
 /**
  *@author 23238183 佐藤樹
  *
  */
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
+    @Query("SELECT SUM(e.amount) FROM Expense e WHERE e.type = :type")
+    Integer sumByType(ExpenseType type);
 }
+
