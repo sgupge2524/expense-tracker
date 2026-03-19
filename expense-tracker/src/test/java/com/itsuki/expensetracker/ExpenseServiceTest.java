@@ -19,7 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class ExpenseServiceTest {
 
     @Autowired
-    private ExpenseService expenseService; // まだ存在しないのでコンパイルエラーになります
+    private ExpenseService expenseService; 
 
     @Transactional
     @Test
@@ -36,6 +36,8 @@ class ExpenseServiceTest {
         // 3. 検証 (Assert)
         assertThat(savedExpense.getId()).isNotNull();
         assertThat(savedExpense.getAmount()).isEqualTo(1000);
+        assertThat(savedExpense.getType()).isEqualTo(ExpenseType.EXPENSE);
+        assertThat(savedExpense.getDate()).isEqualTo(LocalDate.now());
     }
     
     @Transactional
@@ -43,32 +45,24 @@ class ExpenseServiceTest {
     void 全ての収支データを取得できること() {
         // 1. 準備 (Arrange)
         // 2つのデータを保存したと仮定します
-        saveSampleExpense(1000, ExpenseType.EXPENSE);
-        saveSampleExpense(5000, ExpenseType.INCOME);
+        saveSampleExpense(1000, ExpenseType.EXPENSE, "ランチ代");
+        saveSampleExpense(5000, ExpenseType.INCOME, "給料");
 
         // 2. 実行 (Act)
         List<Expense> list = expenseService.findAll();
 
         // 3. 検証 (Assert)
         assertThat(list).hasSize(2);
+        assertThat(list).extracting(Expense::getAmount)
+        .containsExactlyInAnyOrder(1000, 5000);
     }
     
     @Transactional
-    @Test void 検索文字列だけを含むデータを取得できること() {
+    @Test 
+    void メモに検索文字列を含む収支データを取得できること() {
         // 1. 準備 (Arrange)
-        Expense expense1 = new Expense();
-        expense1.setAmount(1000);
-        expense1.setType(ExpenseType.EXPENSE);
-        expense1.setDate(LocalDate.now());
-        expense1.setMemo("ランチ代");
-        expenseService.save(expense1);
-
-        Expense expense2 = new Expense();
-        expense2.setAmount(2000);
-        expense2.setType(ExpenseType.EXPENSE);
-        expense2.setDate(LocalDate.now());
-        expense2.setMemo("交通費");
-        expenseService.save(expense2);
+        saveSampleExpense(1000, ExpenseType.EXPENSE, "ランチ代");
+        saveSampleExpense(5000, ExpenseType.EXPENSE, "交通費");
 
         // 2. 実行 (Act)
         List<Expense> list = expenseService.findByMemoContaining("ランチ");
@@ -78,13 +72,13 @@ class ExpenseServiceTest {
         assertThat(list.get(0).getMemo()).contains("ランチ");
     }
     
-    private void saveSampleExpense(Integer amount, ExpenseType type) {
+    private void saveSampleExpense(Integer amount, ExpenseType type, String memo) {
         Expense expense = new Expense();
         expense.setAmount(amount);
         expense.setType(type);
         expense.setDate(LocalDate.now());
-        // ここでリポジトリを使って保存する処理が必要になります
-        Expense savedExpense = expenseService.save(expense);
+        expense.setMemo(memo);
+        expenseService.save(expense);
     }
 }
 
