@@ -38,6 +38,8 @@ public class ExpenseController {
     public String showExpneseList(Model model) {
         List<Expense> expenses = expenseService.findAll();
         model.addAttribute("expenses", expenses);
+        model.addAttribute("totalExpense", expenseService.getTotalExpense());
+        model.addAttribute("totalIncome", expenseService.getTotalIncome());
         return "expenses"; // Thymeleafのテンプレート名
     }
     

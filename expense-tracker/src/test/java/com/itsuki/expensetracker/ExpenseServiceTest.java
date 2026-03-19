@@ -1,6 +1,8 @@
 package com.itsuki.expensetracker;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -70,6 +72,31 @@ class ExpenseServiceTest {
         // 3. 検証 (Assert)
         assertThat(list).hasSize(1);
         assertThat(list.get(0).getMemo()).contains("ランチ");
+    }
+    
+    @Transactional
+    @Test
+    void 合計支出を取得できること() {
+        saveSampleExpense(1000, ExpenseType.EXPENSE, "ランチ代");
+        saveSampleExpense(5000, ExpenseType.EXPENSE, "交通費");
+        saveSampleExpense(10000, ExpenseType.EXPENSE, "備品代");
+        saveSampleExpense(10000, ExpenseType.INCOME, "給与");
+
+        int totalExpense = expenseService.getTotalExpense();
+
+        assertEquals(16000, totalExpense);
+    }
+    
+    @Transactional
+    @Test
+    void 合計収入を取得できること() {
+        saveSampleExpense(1000, ExpenseType.EXPENSE, "ランチ代");
+        saveSampleExpense(20000, ExpenseType.INCOME, "給与");
+        saveSampleExpense(5000, ExpenseType.INCOME, "副収入");
+
+        int totalIncome = expenseService.getTotalIncome();
+
+        assertEquals(25000, totalIncome);
     }
     
     private void saveSampleExpense(Integer amount, ExpenseType type, String memo) {

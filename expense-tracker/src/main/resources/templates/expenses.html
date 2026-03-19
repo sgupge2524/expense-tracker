@@ -25,6 +25,9 @@
     </tr>
 </table>
 
+<p>支出合計: <span th:text="${totalExpense}"></span></p>
+<p>収入合計: <span th:text="${totalIncome}"></span></p>
+
 <form th:action="@{/expenses}" method="post">
 
     金額: <input type="number" name="amount"><br>
@@ -41,6 +44,8 @@
 
     <button type="submit">保存</button>
 </form>
+
+
 
 </body>
 </html>

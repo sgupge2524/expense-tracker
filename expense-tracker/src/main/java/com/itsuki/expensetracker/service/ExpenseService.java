@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.itsuki.expensetracker.model.Expense;
+import com.itsuki.expensetracker.model.ExpenseType;
 import com.itsuki.expensetracker.repository.ExpenseRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,26 @@ public class ExpenseService {
             .toList();
 
         return filteredExpenses;
+    }
+    
+    public List<Expense> findByType(ExpenseType keyword) {
+        List<Expense> allExpense = expenseRepository.findAll();
+
+        List<Expense> filteredExpenses = allExpense.stream()
+            .filter(expense -> expense.getType() == keyword)
+            .toList();
+
+        return filteredExpenses;
+    }
+    
+    public int getTotalExpense() {
+        Integer total = expenseRepository.sumByType(ExpenseType.EXPENSE);
+        return total != null ? total : 0;
+    }
+    
+    public int getTotalIncome() {
+        Integer total = expenseRepository.sumByType(ExpenseType.INCOME);
+        return total != null ? total : 0;
     }
     
     
