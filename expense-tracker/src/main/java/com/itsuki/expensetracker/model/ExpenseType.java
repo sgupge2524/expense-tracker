@@ -12,6 +12,7 @@ package com.itsuki.expensetracker.model;
  *
  */
 public enum ExpenseType {
+    
     INCOME, EXPENSE
 
 }
