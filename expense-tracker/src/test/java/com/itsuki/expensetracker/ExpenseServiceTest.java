@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.transaction.Transactional;
+
 import com.itsuki.expensetracker.model.Expense;
 import com.itsuki.expensetracker.model.ExpenseType;
 import com.itsuki.expensetracker.service.ExpenseService;
@@ -19,6 +21,7 @@ class ExpenseServiceTest {
     @Autowired
     private ExpenseService expenseService; // まだ存在しないのでコンパイルエラーになります
 
+    @Transactional
     @Test
     void 収支データを保存できること() {
         // 1. 準備 (Arrange)
@@ -35,6 +38,7 @@ class ExpenseServiceTest {
         assertThat(savedExpense.getAmount()).isEqualTo(1000);
     }
     
+    @Transactional
     @Test
     void 全ての収支データを取得できること() {
         // 1. 準備 (Arrange)
@@ -47,6 +51,31 @@ class ExpenseServiceTest {
 
         // 3. 検証 (Assert)
         assertThat(list).hasSize(2);
+    }
+    
+    @Transactional
+    @Test void 検索文字列だけを含むデータを取得できること() {
+        // 1. 準備 (Arrange)
+        Expense expense1 = new Expense();
+        expense1.setAmount(1000);
+        expense1.setType(ExpenseType.EXPENSE);
+        expense1.setDate(LocalDate.now());
+        expense1.setMemo("ランチ代");
+        expenseService.save(expense1);
+
+        Expense expense2 = new Expense();
+        expense2.setAmount(2000);
+        expense2.setType(ExpenseType.EXPENSE);
+        expense2.setDate(LocalDate.now());
+        expense2.setMemo("交通費");
+        expenseService.save(expense2);
+
+        // 2. 実行 (Act)
+        List<Expense> list = expenseService.findByMemoContaining("ランチ");
+
+        // 3. 検証 (Assert)
+        assertThat(list).hasSize(1);
+        assertThat(list.get(0).getMemo()).contains("ランチ");
     }
     
     private void saveSampleExpense(Integer amount, ExpenseType type) {

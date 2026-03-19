@@ -10,8 +10,10 @@ package com.itsuki.expensetracker.model;
 import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import lombok.Getter;
@@ -26,14 +28,13 @@ import lombok.Setter;
 @Entity
 public class Expense {
     @Id
-    @GeneratedValue
-    private Long id;
-    
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; 
     private Integer amount;
+    @Enumerated(EnumType.STRING)
     private ExpenseType type;
     private LocalDate date;
     private String memo;
     private Long userId;
     private Long categoryId;
-    
 }
