@@ -7,6 +7,12 @@
 
 <h1>家計簿一覧</h1>
 
+<form th:action="@{/expenses}" method="get">
+    <input type="number" name="year" th:value="${selectedYear}" />
+    <input type="number" name="month" th:value="${selectedMonth}" min="1" max="12" />
+    <button type="submit">表示</button>
+</form>
+
 <table border="1">
     <tr>
         <th>ID</th>
