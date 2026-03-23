@@ -1,5 +1,7 @@
 package com.itsuki.expensetracker.service;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +54,35 @@ public class ExpenseService {
     
     public int getTotalIncome() {
         Integer total = expenseRepository.sumByType(ExpenseType.INCOME);
+        return total != null ? total : 0;
+    }
+    
+    // 指定された年月の収支データを取得するメソッド
+    public List<Expense> findByMonth(int year, int month) {
+        YearMonth yearMonth = YearMonth.of(year, month);
+        LocalDate startDate = yearMonth.atDay(1);
+        LocalDate endDate = yearMonth.atEndOfMonth();
+
+        return expenseRepository.findByDateBetween(startDate, endDate);
+    }
+    
+    // 指定された年月の合計支出を取得するメソッド
+    public int getTotalExpenseByMonth(int year, int month) {
+        List<Expense> filteredExpenses = findByMonth(year, month);
+        Integer total = filteredExpenses.stream()
+                .filter(expense -> expense.getType() == ExpenseType.EXPENSE)
+                .mapToInt(Expense::getAmount)
+                .sum();
+        return total != null ? total : 0;
+    }
+    
+ // 指定された年月の合計収入を取得するメソッド
+    public int getTotalIncomeByMonth(int year, int month) {
+        List<Expense> filteredExpenses = findByMonth(year, month);
+        Integer total = filteredExpenses.stream()
+                .filter(expense -> expense.getType() == ExpenseType.INCOME)
+                .mapToInt(Expense::getAmount)
+                .sum();
         return total != null ? total : 0;
     }
     
