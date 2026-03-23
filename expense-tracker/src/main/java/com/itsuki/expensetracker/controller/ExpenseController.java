@@ -50,6 +50,8 @@ public class ExpenseController {
         model.addAttribute("expenses", expenses);
         model.addAttribute("totalExpense", expenseService.getTotalExpense());
         model.addAttribute("totalIncome", expenseService.getTotalIncome());
+        model.addAttribute("totalExpenseByMonth", expenseService.getTotalExpenseByMonth(targetYear, targetMonth));
+        model.addAttribute("totalIncomeByMonth", expenseService.getTotalIncomeByMonth(targetYear, targetMonth));
         model.addAttribute("selectedYear", targetYear);
         model.addAttribute("selectedMonth", targetMonth);
 

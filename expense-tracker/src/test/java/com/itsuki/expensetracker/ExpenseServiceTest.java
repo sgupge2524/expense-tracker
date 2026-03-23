@@ -101,7 +101,7 @@ class ExpenseServiceTest {
     
     @Transactional
     @Test
-    void 月別収支を取得できること() {
+    void 月別収支データを取得できること() {
         saveSampleExpense(1000, ExpenseType.EXPENSE, "ランチ代", LocalDate.of(2026, 3, 10));
         saveSampleExpense(20000, ExpenseType.INCOME, "給与", LocalDate.of(2026, 3, 15));
         saveSampleExpense(5000, ExpenseType.INCOME, "副収入", LocalDate.of(2026, 3, 20));
@@ -110,6 +110,34 @@ class ExpenseServiceTest {
         List<Expense> list = expenseService.findByMonth(2026, 3);
 
         assertThat(list).hasSize(3);
+    }
+    
+    @Transactional
+    @Test
+    void 月別収支を取得できること() {
+        saveSampleExpense(1000, ExpenseType.EXPENSE, "ランチ代", LocalDate.of(2026, 3, 10));
+        saveSampleExpense(20000, ExpenseType.EXPENSE, "給与", LocalDate.of(2026, 3, 15));
+        saveSampleExpense(5000, ExpenseType.EXPENSE, "副収入", LocalDate.of(2026, 3, 20));
+        saveSampleExpense(8000, ExpenseType.INCOME, "別月収入", LocalDate.of(2026, 4, 1));
+
+
+        int totalExpense = expenseService.getTotalExpenseByMonth(2026, 3);
+
+        assertEquals(26000, totalExpense);
+    }
+    
+    @Transactional
+    @Test
+    void 月別収入を取得できること() {
+        saveSampleExpense(1000, ExpenseType.EXPENSE, "ランチ代", LocalDate.of(2026, 3, 10));
+        saveSampleExpense(20000, ExpenseType.EXPENSE, "給与", LocalDate.of(2026, 3, 15));
+        saveSampleExpense(5000, ExpenseType.EXPENSE, "副収入", LocalDate.of(2026, 3, 20));
+        saveSampleExpense(8000, ExpenseType.INCOME, "別月収入", LocalDate.of(2026, 4, 1));
+
+
+        int totalExpense = expenseService.getTotalIncomeByMonth(2026, 4);
+
+        assertEquals(8000, totalExpense);
     }
     
     private void saveSampleExpense(Integer amount, ExpenseType type, String memo) {

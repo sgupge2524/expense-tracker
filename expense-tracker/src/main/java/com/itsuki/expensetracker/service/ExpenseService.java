@@ -66,5 +66,25 @@ public class ExpenseService {
         return expenseRepository.findByDateBetween(startDate, endDate);
     }
     
+    // 指定された年月の合計支出を取得するメソッド
+    public int getTotalExpenseByMonth(int year, int month) {
+        List<Expense> filteredExpenses = findByMonth(year, month);
+        Integer total = filteredExpenses.stream()
+                .filter(expense -> expense.getType() == ExpenseType.EXPENSE)
+                .mapToInt(Expense::getAmount)
+                .sum();
+        return total != null ? total : 0;
+    }
+    
+ // 指定された年月の合計収入を取得するメソッド
+    public int getTotalIncomeByMonth(int year, int month) {
+        List<Expense> filteredExpenses = findByMonth(year, month);
+        Integer total = filteredExpenses.stream()
+                .filter(expense -> expense.getType() == ExpenseType.INCOME)
+                .mapToInt(Expense::getAmount)
+                .sum();
+        return total != null ? total : 0;
+    }
+    
     
 }
