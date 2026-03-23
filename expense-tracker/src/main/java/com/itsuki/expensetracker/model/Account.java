@@ -2,21 +2,15 @@
 * 佐賀大学理工学部数理・情報部門 
 *  ソフトウェア協同開発 第x回 xx演習 
 * 作成者: 23238183 佐藤樹 
-* 作成日: 2026/02/13 
+* 作成日: 2026/03/23 
 * 説明:  
 *-----------------------------------------------------------*/ 
 package com.itsuki.expensetracker.model;
 
-import java.time.LocalDate;
-
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -25,23 +19,12 @@ import lombok.Setter;
  *@author 23238183 佐藤樹
  *
  */
+@Entity
 @Getter
 @Setter
-@Entity
-public class Expense {
+public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; 
-    private Integer amount;
-    @Enumerated(EnumType.STRING)
-    private ExpenseType type;
-    private LocalDate date;
-    private String memo;
-    
-    @ManyToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
-    
-    @Enumerated(EnumType.STRING)
-    private Category category;
+    private Long id;
+    private String name;
 }
