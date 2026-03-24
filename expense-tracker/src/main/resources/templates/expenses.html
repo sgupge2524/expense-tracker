@@ -20,6 +20,7 @@
         <th>種別</th>
         <th>日付</th>
         <th>メモ</th>
+		<th>アカウント</th>
     </tr>
 
     <tr th:each="expense : ${expenses}">
@@ -28,6 +29,7 @@
         <td th:text="${expense.type}"></td>
         <td th:text="${expense.date}"></td>
         <td th:text="${expense.memo}"></td>
+        <td th:text="${expense.account.name}"></td>
     </tr>
 </table>
 
@@ -49,11 +51,13 @@
     日付: <input type="date" name="date"><br>
 
     メモ: <input type="text" name="memo"><br>
+	
+	アカウント: <select name="accountId">
+        <option th:each="account : ${accounts}" th:value="${account.id}" th:text="${account.name}"></option>
+		
+		    </select><br>
 
     <button type="submit">保存</button>
 </form>
-
-
-
 </body>
 </html>
