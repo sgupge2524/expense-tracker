@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.itsuki.expensetracker.model.Account;
 import com.itsuki.expensetracker.model.Expense;
+import com.itsuki.expensetracker.repository.AccountRepository;
+import com.itsuki.expensetracker.service.AccountService;
 import com.itsuki.expensetracker.service.ExpenseService;
 
 
@@ -35,6 +38,9 @@ public class ExpenseController {
     @Autowired
     private ExpenseService expenseService;
     
+    @Autowired
+    private AccountService accountService;
+    
     // 画面表示
     @GetMapping
     public String showExpneseList(
@@ -46,8 +52,10 @@ public class ExpenseController {
         int targetMonth = (month != null) ? month : LocalDate.now().getMonthValue();
 
         List<Expense> expenses = expenseService.findByMonth(targetYear, targetMonth);
+        List<Account> accounts = accountService.findAll();
         
         model.addAttribute("expenses", expenses);
+        model.addAttribute("accounts", accounts);
         model.addAttribute("totalExpense", expenseService.getTotalExpense());
         model.addAttribute("totalIncome", expenseService.getTotalIncome());
         model.addAttribute("totalExpenseByMonth", expenseService.getTotalExpenseByMonth(targetYear, targetMonth));
@@ -59,10 +67,11 @@ public class ExpenseController {
     }
     
     @PostMapping
-    public String createExpense(@ModelAttribute Expense expense) {
-        // ① 保存処理
+    public String createExpense(@ModelAttribute Expense expense, @RequestParam Long accountId) {
+        
+        expense.setAccount(accountService.findById(accountId));
         expenseService.save(expense);
-        // ② 一覧画面にリダイレクト
+        
         return "redirect:/expenses";
     }
 

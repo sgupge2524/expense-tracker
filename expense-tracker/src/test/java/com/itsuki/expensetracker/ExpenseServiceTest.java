@@ -8,10 +8,12 @@ import java.util.List;
 
 import jakarta.transaction.Transactional;
 
+import com.itsuki.expensetracker.model.Account;
 import com.itsuki.expensetracker.model.Expense;
 import com.itsuki.expensetracker.model.ExpenseType;
 import com.itsuki.expensetracker.service.ExpenseService;
 
+import org.apache.catalina.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,6 +42,30 @@ class ExpenseServiceTest {
         assertThat(savedExpense.getAmount()).isEqualTo(1000);
         assertThat(savedExpense.getType()).isEqualTo(ExpenseType.EXPENSE);
         assertThat(savedExpense.getDate()).isEqualTo(LocalDate.now());
+    }
+    
+    @Transactional
+    @Test
+    void アカウントありで収支データを保存できること() {
+        // 1. 準備 (Arrange)
+        Account account = new Account();
+        account.setName("テスト口座");
+        Expense expense = new Expense();
+        expense.setAmount(1000);
+        expense.setType(ExpenseType.EXPENSE);
+        expense.setDate(LocalDate.now());
+        expense.setAccount(account);
+
+        // 2. 実行 (Act)
+        Expense savedExpense = expenseService.save(expense);
+
+        // 3. 検証 (Assert)
+        assertThat(savedExpense.getId()).isNotNull();
+        assertThat(savedExpense.getAmount()).isEqualTo(1000);
+        assertThat(savedExpense.getType()).isEqualTo(ExpenseType.EXPENSE);
+        assertThat(savedExpense.getDate()).isEqualTo(LocalDate.now());
+        assertThat(savedExpense.getAccount()).isNotNull();
+        assertThat(savedExpense.getAccount().getName()).isEqualTo("テスト口座");
     }
     
     @Transactional
@@ -150,6 +176,20 @@ class ExpenseServiceTest {
         expense.setType(type);
         expense.setDate(date);
         expense.setMemo(memo);
+        expenseService.save(expense);
+    }
+
+    private void saveSampleExpense(Integer amount, ExpenseType type, String memo, Account account) {
+        saveSampleExpense(amount, type, memo, LocalDate.now(), account);
+    }
+
+    private void saveSampleExpense(Integer amount, ExpenseType type, String memo, LocalDate date, Account account) {
+        Expense expense = new Expense();
+        expense.setAmount(amount);
+        expense.setType(type);
+        expense.setDate(date);
+        expense.setMemo(memo);
+        expense.setAccount(account);
         expenseService.save(expense);
     }
     

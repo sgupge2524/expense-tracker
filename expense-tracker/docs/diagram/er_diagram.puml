@@ -1,24 +1,12 @@
 @startuml
 left to right direction
 
-entity User {
+entity Account {
   +id : Long <<PK>>
   --
   name : String <<NOT NULL>>
-  email : String <<UNIQUE>><<NOT NULL>>
-  password : String <<NOT NULL>>
 }
 
-entity Category {
-  +id : Long <<PK>>
-  --
-  name : String <<NOT NULL>>
-  user_id : Long <<FK>><<NOT NULL>>
-}
-
-note right of Category
-UNIQUE(user_id, name)
-end note
 
 ' amountは必ず正の整数（Validationで制御）
 entity Expense {
@@ -28,17 +16,17 @@ entity Expense {
   type : ExpenseType <<NOT NULL>> 
   date : LocalDate <<NOT NULL>>
   memo : String 
-  user_id : Long <<FK>><<NOT NULL>>
-  category_id : Long <<FK>><<NOT NULL>>
+  account : Account <<FK>><<NOT NULL>>
+  category : Category <<FK>><<NOT NULL>>
 }
 
 note left of Expense
 Enum: income / expense
 CHECK (amount >= 0)
+
+Enum: 
 end note
 
-User ||--o{ Category
-User ||--o{ Expense
-Category ||--o{ Expense
+Account ||--o{ Expense
 
 @enduml
